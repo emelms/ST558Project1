@@ -53,6 +53,8 @@ JSON was built for simplicity of sending data between machines with minimal loss
 
 Reviewing CRANs [documentation and list of packages](https://cran.r-project.org/web/packages/available_packages_by_name.html) for importing JSON formatted data, the package most frequently used based on the number of versions released and number of downloads is [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html). Outlined in the [quick start vignette](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html) the function `fromJSON` was created to read in data. This function has a sereies of [variables](https://www.rdocumentation.org/packages/jsonlite/versions/1.6/topics/toJSON%2C%20fromJSON) to customize the input process and format the data when pulling the data from the web into a R object. 
 
+__Add information on the tidyverse packages used!__
+
 # Gotta Catch 'Em All 
 
 In July 2016, _Pokémon Go_ was released to the world and quickly rose to the top as the most popular mobile app. Combining the geographical location of the mobile device and the camera, users could hunt for creatures of varying types in an attempt to capture them and battle others. Since the release of the original Pocket Monster video game _Red and Green_ in 1996, the goal is to defeat other players in battles with their pocket monsters by type advantage and attack/defense stats in the hopes of becoming a Pokémon Master. 
@@ -164,30 +166,65 @@ gDefense + geom_bar() +
   labs(x = "Base Attack Value")
 ```
 
-# Just regular tables 
+# Monster additionals
 
-Below you can find our final data set with all the variables listed above:
+## The perfect balance (New Variable)
+
+Any Pokémon challenger knows that a single match can come down to the final Pokémon and most strategic players save their strongest for the end. The final Pokémon will usually fall into one these three categories:
+
+* One Hit Knockouts  
+  + A Pokémon who is all attack and doesn't allow the other player to make a move by defeating the opposing Pokémon in a single attack  
+* Slow and Steady  
+  + A Pokémon who is mainly defense and over a long period of time defeats the opposing fighter by wearing down their stamina until they can attack no more  
+* The Double Edge Sword  
+  + A Pokémon who is balanced in their attack and defense stats that lands a victory by being flexible during each turn  
+
+We realized we needed a new measurment to scale the difference between attack and defense when comparing them to the categorical variables. So our variables `Stat Ratio` divides a Pokémon attack by their defense. From this ratio, we can more clearly see any values larger than one will yield a high attack type, values less than one will show greater emphasis on defense, and finally values closer to one will be balanced. The summary below gives some insight as to the distribution of our new column:
+
+```{r summary_stat_ratio, echo=FALSE,warning=FALSE,message=FALSE}
+statRatio <- allPokemonData$stats[1]/allPokemonData$stats[2]
+colnames(statRatio) <- c("")
+knitr::kable(summary(statRatio), caption = "Summary of Stat Ratio")
+```
+
+## Adding it all up (Function)
+
+We have discussed our two catigorical and two quantitative variables (along with a new ratio column) in seperate parts but now the challenge comes in combining all the transformations and creations into a single data set. To perform this feat we created the following function:
 
 ```{r all_variables, echo=TRUE,warning=FALSE,message=FALSE}
-pokemonSizeTemp <- allPokemonData %>% select(buddySize, height)
+combineAll <- function(sizeAndHeight, types, attack, defense){
+pokemonSizeTemp <- sizeAndHeight
 pokemonSizeTemp <- tibble(pokemonSizeTemp[[1]][,2],pokemonSizeTemp$height)
 colnames(pokemonSizeTemp) <- c("Size","Height")
 sizeAnalysis <- pokemonSizeTemp %>% transmute(
                             "Size" = ifelse(Size == "Flying",ifelse(Height <= 0.41, "Small", ifelse(Height <= 1, "Medium","Large")), 
                                             ifelse(Size == "Big", "Large", ifelse(Size == "Baby" | Size == "Shoulder", "Small","Medium"))))
-pokemonTypeTemp<- allPokemonData$types
+pokemonTypeTemp<- types
 primaryType <- c()
 secondaryType <- c()
 for(i in 1:length(pokemonTypeTemp)){
   primaryType <- c(primaryType, pokemonTypeTemp[[i]][1,2])
   secondaryType <- c(secondaryType, pokemonTypeTemp[[i]][2,2])
 }
-attackTemp <- allPokemonData$stats[1]
-defenseTemp <- allPokemonData$stats[2]
-pokemonAnalysis <- tibble(primaryType,secondaryType,sizeAnalysis,attackTemp,defenseTemp)
-colnames(pokemonAnalysis) <- c("Primary Type","Secondary Type","Size","Base Attack","Base Defense")
-knitr::kable(head(pokemonAnalysis, n = 15),caption = "Preview of Pokémon Data")
+attackTemp <- attack
+defenseTemp <- defense
+pokemonAnalysis <- tibble(primaryType,secondaryType,sizeAnalysis,attackTemp,defenseTemp,(attackTemp/defenseTemp))
+colnames(pokemonAnalysis) <- c("Primary Type","Secondary Type","Size","Base Attack","Base Defense", "Stat Ratio")
+return (pokemonAnalysis)
+}
+pokemonData <- combineAll(allPokemonData %>% select(buddySize, height), allPokemonData$types, allPokemonData$stats[1], allPokemonData$stats[2])
 ```
+
+Finally we can see a sample of the function output:
+
+```{r preview_all_variables, echo=FALSE,warning=FALSE,message=FALSE}
+knitr::kable(head(pokemonData, n = 15),caption = "Preview of Pokémon Data")
+```
+
+# Just regular tables 
+
+Add graphs and charts when comparing the categorical and quantitative variables. 
 
 # Plots with some "pizzazz"
 
+Finally summarize findings with plots and conclusion. 
