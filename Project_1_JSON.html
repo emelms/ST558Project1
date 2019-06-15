@@ -314,7 +314,7 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#lets-put-the-joy-in-json">Let’s put the Joy in JSON!</a></li>
-<li><a href="#what-packages-pack-the-most-punch-for-loading-json">What packages “pack” the most punch for loading JSON</a></li>
+<li><a href="#what-packages-pack-the-most-punch-for-json">What packages “pack” the most punch for JSON</a></li>
 <li><a href="#gotta-catch-em-all">Gotta Catch ’Em All</a><ul>
 <li><a href="#pokemon-type">Pokémon Type</a></li>
 <li><a href="#pokemon-size">Pokémon Size</a></li>
@@ -327,6 +327,7 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#just-regular-tables">Just regular tables</a></li>
 <li><a href="#plots-with-some-pizzazz">Plots with some “pizzazz”</a></li>
+<li><a href="#to-sum-it-all-up">To sum it all up!</a></li>
 </ul>
 </div>
 
@@ -357,8 +358,8 @@ $(document).ready(function () {
 <p>The above example would be sent from the user’s machine to an Application Programming Interface (API) that was developed to accept shopping cart information from customers. The example has information on the customer, two items they want to add, and the ids for all values in the JSON. The advantage to this is that it’s easy for humans to understand what tasks the customer is asking the server to perform, while being machine readible using the ids as reference points for the server to find all the required information. Now if the customer had not selected their third item yet but the power went out then the first two items would have been saved as the customer had already added them to their shopping cart and the server had already processed this information. This makes the framework that connects the personal machine and the server <code>stateless</code> since the state of the user’s machine does not impact the state of the server, and vice versa.</p>
 <p>JSON was built for simplicity of sending data between machines with minimal loss of data while being easy to read and understand for both humans and machines.</p>
 </div>
-<div id="what-packages-pack-the-most-punch-for-loading-json" class="section level1">
-<h1>What packages “pack” the most punch for loading JSON</h1>
+<div id="what-packages-pack-the-most-punch-for-json" class="section level1">
+<h1>What packages “pack” the most punch for JSON</h1>
 <p>Reviewing CRANs <a href="https://cran.r-project.org/web/packages/available_packages_by_name.html">documentation and list of packages</a> for importing JSON formatted data, the package most frequently used based on the number of versions released and number of downloads is <a href="https://cran.r-project.org/web/packages/jsonlite/index.html">jsonlite</a>. Outlined in the <a href="https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html">quick start vignette</a> the function <code>fromJSON</code> was created to read in data. This function has a sereies of <a href="https://www.rdocumentation.org/packages/jsonlite/versions/1.6/topics/toJSON%2C%20fromJSON">variables</a> to customize the input process and format the data when pulling the data from the web into a R object.</p>
 <p><strong>Add information on the tidyverse packages used!</strong></p>
 </div>
@@ -691,6 +692,10 @@ pokemonData &lt;- combineAll(allPokemonData %&gt;% select(buddySize, height), al
 </div>
 <div id="plots-with-some-pizzazz" class="section level1">
 <h1>Plots with some “pizzazz”</h1>
+<p>Add graphs and charts when comparing the categorical and quantitative variables.</p>
+</div>
+<div id="to-sum-it-all-up" class="section level1">
+<h1>To sum it all up!</h1>
 <p>Finally summarize findings with plots and conclusion.</p>
 </div>
 

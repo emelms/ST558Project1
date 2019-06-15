@@ -49,7 +49,7 @@ The above example would be sent from the user's machine to an Application Progra
 
 JSON was built for simplicity of sending data between machines with minimal loss of data while being easy to read and understand for both humans and machines. 
 
-# What packages "pack" the most punch for loading JSON
+# What packages "pack" the most punch for JSON
 
 Reviewing CRANs [documentation and list of packages](https://cran.r-project.org/web/packages/available_packages_by_name.html) for importing JSON formatted data, the package most frequently used based on the number of versions released and number of downloads is [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html). Outlined in the [quick start vignette](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html) the function `fromJSON` was created to read in data. This function has a sereies of [variables](https://www.rdocumentation.org/packages/jsonlite/versions/1.6/topics/toJSON%2C%20fromJSON) to customize the input process and format the data when pulling the data from the web into a R object. 
 
@@ -227,4 +227,8 @@ Add graphs and charts when comparing the categorical and quantitative variables.
 
 # Plots with some "pizzazz"
 
-Finally summarize findings with plots and conclusion. 
+Add graphs and charts when comparing the categorical and quantitative variables. 
+
+# To sum it all up!
+
+Finally summarize findings with plots and conclusion.
