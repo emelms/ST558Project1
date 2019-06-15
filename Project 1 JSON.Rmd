@@ -183,8 +183,8 @@ We realized we needed a new measurment to scale the difference between attack an
 
 ```{r summary_stat_ratio, echo=FALSE,warning=FALSE,message=FALSE}
 statRatio <- allPokemonData$stats[1]/allPokemonData$stats[2]
-colnames(statRatio) <- c("")
-knitr::kable(summary(statRatio), caption = "Summary of Stat Ratio")
+colnames(statRatio) <- c("Stat Ratio")
+knitr::kable(summary(statRatio))
 ```
 
 ## Adding it all up (Function)
