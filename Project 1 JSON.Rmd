@@ -55,6 +55,8 @@ Reviewing CRANs [documentation and list of packages](https://cran.r-project.org/
 
 __Add information on the tidyverse packages used!__
 
+__Add information on the knitr and DT librarys including why you choose them!___
+
 # Gotta Catch 'Em All 
 
 In July 2016, _Pokémon Go_ was released to the world and quickly rose to the top as the most popular mobile app. Combining the geographical location of the mobile device and the camera, users could hunt for creatures of varying types in an attempt to capture them and battle others. Since the release of the original Pocket Monster video game _Red and Green_ in 1996, the goal is to defeat other players in battles with their pocket monsters by type advantage and attack/defense stats in the hopes of becoming a Pokémon Master. 
@@ -130,6 +132,8 @@ g + geom_boxplot(fill = "white") + labs(title = "Boxplot for Sizes")
 
 From the boxplot, after removing outliers of height greater than 5, if we combine "Baby" and "Shoulder" size into "Small" then there is minimal overlap between in the 1st Quartile and 3rd Quartile range of the sections. We can then use the height attribute to divide the Flying sizes into the appropriate sections. From the summary table below, we will use the 1st and 3rd quartile values to filter Flying, along with changing "Big" to "Large".
 
+
+**I'd recommend making the chart a little nicer by using the function that we created a few homeworks ago to calculate the min, 1st quartile etc.  the min, 1st q etc makes the chart look a little buisy**
 ```{r summary_sizes, echo=FALSE,warning=FALSE,message=FALSE}
 summaryOfSizes <- cbind(summary(filter(filteredSizes, Size == "Baby" | Size == "Shoulder") %>% select(Height)),
                         summary(filter(filteredSizes, Size == "Medium") %>% select(Height)),
@@ -173,11 +177,11 @@ gDefense + geom_bar() +
 Any Pokémon challenger knows that a single match can come down to the final Pokémon and most strategic players save their strongest for the end. The final Pokémon will usually fall into one these three categories:
 
 * One Hit Knockouts  
-  + A Pokémon who is all attack and doesn't allow the other player to make a move by defeating the opposing Pokémon in a single attack  
+  + A Pokémon who is all attack and doesn't allow the other player to make a move by defeating the opposing Pokémon in a single attack.  
 * Slow and Steady  
-  + A Pokémon who is mainly defense and over a long period of time defeats the opposing fighter by wearing down their stamina until they can attack no more  
+  + A Pokémon who is mainly defense and over a long period of time defeats the opposing fighter by wearing down their stamina until they can attack no more.  
 * The Double Edge Sword  
-  + A Pokémon who is balanced in their attack and defense stats that lands a victory by being flexible during each turn  
+  + A Pokémon who is balanced in their attack and defense stats that lands a victory by being flexible during each turn.  
 
 We realized we needed a new measurment to scale the difference between attack and defense when comparing them to the categorical variables. So our variables `Stat Ratio` divides a Pokémon attack by their defense. From this ratio, we can more clearly see any values larger than one will yield a high attack type, values less than one will show greater emphasis on defense, and finally values closer to one will be balanced. The summary below gives some insight as to the distribution of our new column:
 
@@ -221,14 +225,7 @@ Finally we can see a sample of the function output:
 knitr::kable(head(pokemonData, n = 15),caption = "Preview of Pokémon Data")
 ```
 
-# Just regular tables 
 
-Add graphs and charts when comparing the categorical and quantitative variables. 
-
-# Plots with some "pizzazz"
-
-Add graphs and charts when comparing the categorical and quantitative variables. 
-
-# To sum it all up!
+# Summary!
 
 Finally summarize findings with plots and conclusion.
