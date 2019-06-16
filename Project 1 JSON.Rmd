@@ -53,14 +53,13 @@ JSON was built for simplicity of sending data between machines with minimal loss
 
 Reviewing CRANs [documentation and list of packages](https://cran.r-project.org/web/packages/available_packages_by_name.html) for importing JSON formatted data, the package most frequently used based on the number of versions released and number of downloads is [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html). Outlined in the [quick start vignette](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html) the function `fromJSON` was created to read in data. This function has a sereies of [variables](https://www.rdocumentation.org/packages/jsonlite/versions/1.6/topics/toJSON%2C%20fromJSON) to customize the input process and format the data when pulling the data from the web into a R object. 
 
-__Add information on the tidyverse packages used!__
-**The tidyverse packages used in this program are *ggplot2, dplyr, readr, and tibble*. Each package in the tidyverse has a different function and we used them individually throughout the program.**
+In the next section we outline the data we selected for this project but in regards to the package `jsonlite` we did not use any additional options provided by the package to manipulate the data when porting it from the web. The data was well formatted, clean, and small enough in size that we could do all of our data manipulation and transformations within the R Session using the `tidyverse` package. 
+
+The `tidyverse` packages used in this program are *ggplot2, dplyr, and tibble*. Each package in the tidyverse has a different function and we used them individually throughout the program.
 <br />
 *ggplot2* was used to create the plots and graphs depicting the data in many different fashions. This package is very useful and versatile as we can continuously add attributes to our plots due to the simple ggplot2 syntax.
 <br />
 *dplyr* was used to "tidy" up the data by reconfiguring it into a form more suitable for data manipulation. Several of the plots were created with sorted data which was only obtained through functions from the tidyr package.
-<br />
-*readr* was used to import the data from a website into R. In order to get the data loaded into R, we first needed to read it in using an appropriate function that can take a URL as an input and output a data frame.
 <br />
 *tibble* was used to shape the data into a more user-friendly fashion that can help prevent errors in the long run. A tibble is a good choice for a data format when simple tasks are being conducted as they force potential errors to be confronted sooner than data frames may.
 
@@ -92,6 +91,10 @@ A Pokémon's primary type is the most fundamental piece in a player's strategy w
 With the primary type of a monster setting the odds of success based on either how many types are weak against its attacks or how minimal damage it incurs when being attacked by other types, the greater factor can be the scarcity of Pokémon in a given type. In the first Pokémon game _Red and Green_, there was only one dragon type __Dratini__ and out of 151 original creaters made it one the rarest in the game. When tallying all base stats for the first generation of Pokémon, the final evolution of this dragon, __Dragonite__, is [ranked second](https://www.serebii.net/pokedex/stat/all.shtml) only losing to the main legendary Pokémon __Mewtwo__ that could only be captured at special events. 
 
 Choosing Pokémon Type as our first categorical variable when analyzing what factors create a strategic advantage in battle was fundamental. In the graphs below, while many types will be clusterd in a central area, it is the more scarce terrain we are interested in. 
+
+---
+Code comment: The "Types" column is read in as a data frame from the web containing both Primary and Secondary type of each Pokemon. We used a for loop to pull apart the Primary and Secondary types into their own vectors. Then combined them with base attack and defense to show a comparison plot. Also filtered out any attack or defense greater than 300 to have the plot zoom in to show the clustered points more clearly. 
+---
 
 ```{r pokemon_types, echo=FALSE,warning=FALSE,message=FALSE}
 pokemonTypes <- allPokemonData$types
@@ -127,6 +130,10 @@ To turn height and weight into a categorical variable, we can leverage the "Budd
 
 The game developers wanted to give players the option to have their favorite Pokémon walk beside them in the virtual space. However, the Flying level is not based on size but the type of Pokémon. To transform all Flying monsters into the appropriate "Buddy Size" we can look at the following boxplot for height comparison:
 
+---
+Code comment: To filter out Flying size from the "Buddy Size" column, the "Height" column is analyzed and used to determine the cutoff points for which category of "Size" a Flying type should fall into. This is performed using the mutate and factor function to show the analysis of "Buddy Size" in comparison to "Height". 
+---
+
 ```{r size_boxplots, echo=FALSE,warning=FALSE,message=FALSE}
 pokemonSizes <- allPokemonData %>% select(buddySize, height)
 pokemonSizes <- tibble(pokemonSizes[[1]][,2],pokemonSizes$height)
@@ -138,6 +145,10 @@ g + geom_boxplot(fill = "white") + labs(title = "Boxplot for Sizes")
 ```
 
 From the boxplot, after removing outliers of height greater than 5, if we combine "Baby" and "Shoulder" size into "Small" then there is minimal overlap between in the 1st Quartile and 3rd Quartile range of the sections. We can then use the height attribute to divide the Flying sizes into the appropriate sections. From the summary table below, we will use the 1st and 3rd quartile values to filter Flying, along with changing "Big" to "Large".
+
+---
+Code comment: Using the cbind and summary functions to show the categories of small, medium, and large. This is important in setting the cutoff values for flying types. 
+---
 
 ```{r summary_sizes, echo=FALSE,warning=FALSE,message=FALSE}
 summaryOfSizes <- cbind(summary(filter(filteredSizes, Size == "Baby" | Size == "Shoulder") %>% select(Height)),
@@ -190,6 +201,10 @@ Any Pokémon challenger knows that a single match can come down to the final Pok
 
 We realized we needed a new measurment to scale the difference between attack and defense when comparing them to the categorical variables. So our variables `Stat Ratio` divides a Pokémon attack by their defense. From this ratio, we can more clearly see any values larger than one will yield a high attack type, values less than one will show greater emphasis on defense, and finally values closer to one will be balanced. The summary below gives some insight as to the distribution of our new column:
 
+---
+Code comment: Stat ratio variable is determined by dividing the vectors of Base Attack by Base Defense. 
+---
+
 ```{r summary_stat_ratio, echo=FALSE,warning=FALSE,message=FALSE}
 statRatio <- allPokemonData$stats[1]/allPokemonData$stats[2]
 colnames(statRatio) <- c("Stat Ratio")
@@ -223,6 +238,8 @@ return (pokemonAnalysis)
 }
 pokemonData <- combineAll(allPokemonData %>% select(buddySize, height), allPokemonData$types, allPokemonData$stats[1], allPokemonData$stats[2])
 ```
+
+The function `combineAll` takes five columns from the imported Pokémon web data set: "Buddy Size", "Height", "Types", "Base Attack", and "Base Defense". From the description portion on the categorical variables above, "Height" is used categorize "Buddy Size" into three more common levels. This is mainly performed through a series of three nested `ifelse` functions. Then a for loop is used to pull apart that data frame of "Types" into "Primary Type" and "Secondary Type". Finally, the new variable "Stat Ratio" is calculated when using the `tibble` function to combine all columns and is the input vector of "Base Attack" divided by the input vector of "Base Defense". 
 
 Finally we can see a sample of the function output:
 
