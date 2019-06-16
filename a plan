@@ -1,0 +1,12 @@
+I intendeted to find top great fighters in pokemon, I tried to write a chunk , but because of format , I cannot finish. 
+Someone please  correct and finish the code and get the top pokemon.  Thanks. 
+
+
+# aim, to find  the top stat ration based on the primary type and size of pokemon (who are the best pokemon to fight)
+   ##1, select 3 var
+   ##2, group_by `Primary Type` and 'size'
+   ##3, count the average state ratio (meanRatio)
+   ##4, order  from top to bottom meanRatio and list n=10 top fighter.
+
+pokemonData%>% select(`Primary Type`,size, 'Stat Ratio') %>% group_by(`Primary Type`,'size') %>%  
+  summarise(meanRatio =mean ('Stat Ratio',na.rm=T)) %>% arrange(desc(meanRatio), n=10)
