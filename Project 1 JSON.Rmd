@@ -54,6 +54,15 @@ JSON was built for simplicity of sending data between machines with minimal loss
 Reviewing CRANs [documentation and list of packages](https://cran.r-project.org/web/packages/available_packages_by_name.html) for importing JSON formatted data, the package most frequently used based on the number of versions released and number of downloads is [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html). Outlined in the [quick start vignette](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html) the function `fromJSON` was created to read in data. This function has a sereies of [variables](https://www.rdocumentation.org/packages/jsonlite/versions/1.6/topics/toJSON%2C%20fromJSON) to customize the input process and format the data when pulling the data from the web into a R object. 
 
 __Add information on the tidyverse packages used!__
+**The tidyverse packages used in this program are *ggplot2, dplyr, readr, and tibble*. Each package in the tidyverse has a different function and we used them individually throughout the program.**
+<br />
+*ggplot2* was used to create the plots and graphs depicting the data in many different fashions. This package is very useful and versatile as we can continuously add attributes to our plots due to the simple ggplot2 syntax.
+<br />
+*dplyr* was used to "tidy" up the data by reconfiguring it into a form more suitable for data manipulation. Several of the plots were created with sorted data which was only obtained through functions from the tidyr package.
+<br />
+*readr* was used to import the data from a website into R. In order to get the data loaded into R, we first needed to read it in using an appropriate function that can take a URL as an input and output a data frame.
+<br />
+*tibble* was used to shape the data into a more user-friendly fashion that can help prevent errors in the long run. A tibble is a good choice for a data format when simple tasks are being conducted as they force potential errors to be confronted sooner than data frames may.
 
 # Gotta Catch 'Em All 
 
