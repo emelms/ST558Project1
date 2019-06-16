@@ -230,14 +230,74 @@ Finally we can see a sample of the function output:
 knitr::kable(head(pokemonData, n = 15),caption = "Preview of Pokémon Data")
 ```
 
-# Just regular tables 
+# Plots with some pizzazz! 
 
-Add graphs and charts when comparing the categorical and quantitative variables. 
+```{r moreBoxPlots, echo = FALSE}
+Type <- pokemonData$`Primary Type`
+pokemonDF <- cbind(pokemonData$`Primary Type`, pokemonData$Size, pokemonData$`Base Attack`, pokemonData$`Base Defense`)
+#boxplot for Attack by Size
+gSA <- ggplot(pokemonDF, aes(x = Size, y = baseAttack))
+gSA + geom_boxplot(fill = "white") + labs(title = "Boxplot for Attack from Sizes") +
+  geom_jitter(aes(color = Size))
+#boxplot for Defense by Size
+gSD <- ggplot(pokemonDF, aes(x = Size, y = baseDefense))
+gSD + geom_boxplot(fill = "white") + labs(title = "Boxplot for Defense from Sizes") +
+  geom_jitter(aes(color = Size))
+#boxplot for Attack by Type
+gTA <- ggplot(pokemonDF, aes(x = Type, y = baseAttack))
+gTA + geom_boxplot(fill = "white") + labs(title = "Boxplot for Attack from Types") +
+  geom_jitter(aes(color = Type))
+#boxplot for Defense by Type
+gTD <- ggplot(pokemonDF, aes(x = Type, y = baseDefense))
+gTD + geom_boxplot(fill = "white") + labs(title = "Boxplot for Defense from Types") +
+  geom_jitter(aes(color = Type))
+```
 
-# Plots with some "pizzazz"
 
-Add graphs and charts when comparing the categorical and quantitative variables. 
+# More Tables and Plots
+
+```{r pizzazzType,echo=FALSE}
+#create data frames for Normal Type, Bug Type, and both
+dataN <- pokemonDF %>% filter(Type == "Normal")
+dataB <- pokemonDF %>% filter(Type == "Bug") %>% filter(baseAttack != 17)
+data_filtered <- rbind(dataN,dataB)
+colnames(data_filtered)[colnames(data_filtered)=="pokemonData$`Primary Type`"] <- "Type"
+#create regression fits for each of the two types
+fitN <- lm(formula = baseAttack ~ baseDefense, data = dataN)
+summary(fitN)
+fitB <- lm(formula = baseAttack ~ baseDefense, data = dataB)
+summary(fitB)
+#plot them side by side
+gfit <- ggplot(data_filtered, aes(x = baseDefense, y = baseAttack))
+gfit + geom_point(aes(x = baseDefense, y = baseAttack, colour = Size)) +
+  facet_wrap(~Type)
+```
+
+```{r pizzazzSize, echo=FALSE}
+#create data frames for Small, Medium, Large, and all three
+dataS <- data_filtered %>% filter(Size == "Small")
+dataM <- data_filtered %>% filter(Size == "Medium") %>% filter(baseAttack != 17)
+dataL <- data_filtered %>% filter(Size == "Large")
+data_filtered1 <- rbind(dataS,dataM,dataL)
+
+#create regression fits for each of the two types
+fitS <- lm(formula = baseAttack ~ baseDefense, data = dataS)
+summary(fitS)
+fitM <- lm(formula = baseAttack ~ baseDefense, data = dataM)
+summary(fitM)
+fitL <- lm(formula = baseAttack ~ baseDefense, data = dataL)
+summary(fitL)
+#plot them side by side
+gfit1 <- ggplot(data_filtered1, aes(x = baseDefense, y = baseAttack))
+gfit1 + geom_point(aes(x = baseDefense, y = baseAttack, colour = Type)) +
+  facet_wrap(~Size)
+```
+
 
 # To sum it all up!
 
-Finally summarize findings with plots and conclusion.
+From the boxplots displayed above, there appears to be a clear trend between Attack/Defense when grouped by Size. The larger the size of the Pokemon, the more attack and defense points they tend to have.
+<br />
+When looking at Type, there doesn't appear to be a clear pattern relating to Attack/Defense. With Size, there was a particular order to the groups (Large > Medium > Small), but with Type, there is no clear ordering, thus since the mean values of the boxplots filtered by Type seems to follow an oscillating pattern in addition to some extreme outlier values, we can conclude that there is no real association between Type and Attack/Defense.
+<br />
+This point is consistent with the example above comparing *Normal* Type to *Bug* Type. Even though these two plots show differing values for Type, they appear to have relatively similar shapes. The outputted summary shows the estimate and standard error for baseDefense for Normal to be (0.9301, 0.1146) and Bug to be (0.8821, 0.1404). Though these two types may not be representative of all Pokemon types, they support our claim which is backed by our previous analyses that Size does affect the amount of Attack and Defense points, but Type does not have a significant effect on the amount of ATtack and Defense points.
