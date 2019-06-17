@@ -249,6 +249,8 @@ knitr::kable(head(pokemonData, n = 15),caption = "Preview of Pokémon Data")
 
 # Plots with some pizzazz! 
 
+To determine if there are any trends in the Pokémon world, the following six box plots compare all quantitative variables (Base Attack, Base Defense, and Stat Ratio) to the categorical variables (Primary Type and Size).
+
 ```{r moreBoxPlots, echo = FALSE}
 Type <- pokemonData$`Primary Type`
 pokemonDF <- cbind(pokemonData$`Primary Type`, pokemonData$Size, pokemonData$`Base Attack`, pokemonData$`Base Defense`)
@@ -260,18 +262,33 @@ gSA + geom_boxplot(fill = "white") + labs(title = "Boxplot for Attack from Sizes
 gSD <- ggplot(pokemonDF, aes(x = Size, y = baseDefense))
 gSD + geom_boxplot(fill = "white") + labs(title = "Boxplot for Defense from Sizes") +
   geom_jitter(aes(color = Size))
+#boxplot for Stat Ratio by Size
+#Note: Had an error when attempting to apply Stat Ratio variable in ggplot function so performed vector division within the aes.
+#       The variable is still the same but the calculation is performed within the ggplot package. 
+gSR <- ggplot(pokemonDF, aes(x = Size, y = baseAttack/baseDefense))
+gSR + geom_boxplot(fill = "white") + labs(title = "Boxplot for Stat Ratio from Sizes") +
+  geom_jitter(aes(color = Size)) + ylab("Stat Ratio")
 #boxplot for Attack by Type
 gTA <- ggplot(pokemonDF, aes(x = Type, y = baseAttack))
 gTA + geom_boxplot(fill = "white") + labs(title = "Boxplot for Attack from Types") +
-  geom_jitter(aes(color = Type))
-#boxplot for Defense by Type
+  geom_jitter(aes(color = Type)) + coord_flip()
+#boxplot for Defense by Type 
 gTD <- ggplot(pokemonDF, aes(x = Type, y = baseDefense))
 gTD + geom_boxplot(fill = "white") + labs(title = "Boxplot for Defense from Types") +
-  geom_jitter(aes(color = Type))
+  geom_jitter(aes(color = Type)) + coord_flip()
+#boxplot for Stat Ratio by Type
+#Note: Had an error when attempting to apply Stat Ratio variable in ggplot function so performed vector division within the aes.
+#       The variable is still the same but the calculation is performed within the ggplot package. 
+gTR <- ggplot(pokemonDF, aes(x = Type, y = baseAttack/baseDefense))
+gTR + geom_boxplot(fill = "white") + labs(title = "Boxplot for Stat Ratio from Types") +
+  geom_jitter(aes(color = Type))  + ylab("Stat Ratio") + coord_flip()
 ```
 
+From these box plots, we can see a pattern develop between Size and each of the quantitative variables but not in Pokémon Type as most of the whiskers cover the same width from end to end. 
 
-# More Tables and Plots
+# The battle of Normal and Bug
+
+To further show the lack of trend between a Pokémon Type and their Attack/Defense, we selected _Normal_ and _Bug_ type Pokémon and created the following sets of regression tests and plots. We then factored in Pokémon Size to expound the relationship it has with Attack and Defense. 
 
 ```{r pizzazzType,echo=FALSE}
 #create data frames for Normal Type, Bug Type, and both
@@ -314,7 +331,7 @@ gfit1 + geom_point(aes(x = baseDefense, y = baseAttack, colour = Type)) +
 # To sum it all up!
 
 From the boxplots displayed above, there appears to be a clear trend between Attack/Defense when grouped by Size. The larger the size of the Pokemon, the more attack and defense points they tend to have.
-<br />
+
 When looking at Type, there doesn't appear to be a clear pattern relating to Attack/Defense. With Size, there was a particular order to the groups (Large > Medium > Small), but with Type, there is no clear ordering, thus since the mean values of the boxplots filtered by Type seems to follow an oscillating pattern in addition to some extreme outlier values, we can conclude that there is no real association between Type and Attack/Defense.
-<br />
+
 This point is consistent with the example above comparing *Normal* Type to *Bug* Type. Even though these two plots show differing values for Type, they appear to have relatively similar shapes. The outputted summary shows the estimate and standard error for baseDefense for Normal to be (0.9301, 0.1146) and Bug to be (0.8821, 0.1404). Though these two types may not be representative of all Pokemon types, they support our claim which is backed by our previous analyses that Size does affect the amount of Attack and Defense points, but Type does not have a significant effect on the amount of ATtack and Defense points.
